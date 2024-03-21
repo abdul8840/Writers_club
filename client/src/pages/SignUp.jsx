@@ -64,13 +64,6 @@ export default function SignUp() {
           id='password'
           onChange={handleChange}
         />
-        <input
-          type='number'
-          placeholder='Number'
-          className='border p-3 rounded-lg'
-          id='number'
-          onChange={handleChange}
-        />
 
         <button
           disabled={loading}
