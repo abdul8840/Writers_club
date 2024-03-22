@@ -308,7 +308,7 @@ export default function CreateListing() {
             <div className='flex gap-2'>
               <input
                 type='scifi'
-                id='horror'
+                id='scifi'
                 className='w-5'
                 onChange={handleChange}
                 checked={formData.scifi}
@@ -318,7 +318,7 @@ export default function CreateListing() {
             <div className='flex gap-2'>
               <input
                 type='historic'
-                id='horror'
+                id='historic'
                 className='w-5'
                 onChange={handleChange}
                 checked={formData.historic}

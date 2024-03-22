@@ -58,10 +58,15 @@ const listingSchema = new mongoose.Schema(
       type: Array,
       required: true,
     },
+    likes: {
+      type: Number,
+      default: 0
+    },
     userRef: {
       type: String,
       required: true,
     },
+
   },
   { timestamps: true }
 );

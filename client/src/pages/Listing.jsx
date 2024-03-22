@@ -31,6 +31,11 @@ export default function Listing() {
           setLoading(false);
           return;
         }
+        // Convert string values to boolean
+        data.comedy = data.comedy === "true";
+        data.horror = data.horror === "true";
+        data.romance = data.romance === "true";
+        // Similarly, convert other genre properties to boolean if needed
         setListing(data);
         setLoading(false);
         setError(false);
@@ -41,6 +46,7 @@ export default function Listing() {
     };
     fetchListing();
   }, [params.listingId]);
+  
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -111,6 +117,11 @@ export default function Listing() {
     }
     return null;
   })}
+
+{/* <p className="flex items-center mt-6 gap-2 text-slate-600  text-sm">
+              <FaMapMarkerAlt className="text-green-700" />
+              Likes : {listing.like}
+            </p> */}
 </ul>
 
 

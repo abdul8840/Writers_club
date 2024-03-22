@@ -62,6 +62,33 @@ export const getListing = async (req, res, next) => {
   }
 };
 
+export const likeListing = async (req, res) => {
+  try {
+    const listingId = req.params.listingId;
+    // Find the listing by ID
+    const listing = await Listing.findById(listingId);
+    
+    if (!listing) {
+      return res.status(404).json({ message: 'Listing not found' });
+    }
+
+    // Increment the likes count
+    listing.likes += 1;
+
+    // Save the updated listing
+    await listing.save();
+
+    // Send response with updated likes count
+    res.status(200).json({ likes: listing.likes });
+  } catch (error) {
+    console.error('Error liking listing:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+
+
+
 export const getListings = async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 9;
