@@ -40,14 +40,14 @@ const ListingItem = ({ listing }) => {
   };
 
   return (
-    <div className='bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px]'>
+    <div className='bg-white card shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[250px]'>
       <Link to={`/listing/${listing._id}`}>
         <img
           src={listing.imageUrls[0] || 'https://via.placeholder.com/300'}
           alt='listing cover'
-          className='h-[320px] sm:h-[220px] w-full object-cover hover:scale-105 transition-scale duration-300'
+          className='cover_image'
         />
-        <div className='p-3 flex flex-col gap-2 w-full'>
+        <div className='cover_content'>
           <p className='truncate text-lg font-semibold text-slate-700'>
             {listing.name}
           </p>
@@ -61,7 +61,7 @@ const ListingItem = ({ listing }) => {
           </p>
         </div>
       </Link>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 m-5">
         {/* Render Font Awesome icon conditionally based on like status */}
         <FaThumbsUp
           className={`fa-solid cursor-pointer ${liked ? 'text-blue-500' : ''}`}

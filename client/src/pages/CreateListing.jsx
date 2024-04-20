@@ -184,33 +184,39 @@ export default function CreateListing() {
           />
           <input
             type='text'
-            placeholder='Description'
+            placeholder='Description max length 200'
             className='border p-3 rounded-lg'
             id='shortdescription'
             required
-            maxLength='62'
+            maxLength='200'
             minLength='10'
             onChange={handleChange}
             value={formData.description}
           />
           <textarea
-            type='text'
-            placeholder='Address'
-            className='border p-3 rounded-lg'
-            id='story'
-            required
-            rows='10'
-            onChange={handleChange}
-            value={formData.address}
+             placeholder='Write your story here...'
+             className='border p-3 rounded-lg'
+             id='story'
+             required
+             role="textbox"
+             aria-multiline="true"
+             contenteditable="true" 
+             spellcheck="true"
+             rows='10'
+             onChange={handleChange}
+             value={formData.story}
           />
           <div className='flex gap-6 flex-wrap'>
+            <h3 className='font-bold'>Choose Language : </h3>
+
+            <div className="flex gap-6 flex-wrap">
             <div className='flex gap-2'>
               <input
                 type='checkbox'
                 id='english'
                 className='w-5'
                 onChange={handleChange}
-                checked={formData.type === 'sale'}
+                checked={formData.type === 'english'}
               />
               <span>English</span>
             </div>
@@ -220,7 +226,7 @@ export default function CreateListing() {
                 id='hindi'
                 className='w-5'
                 onChange={handleChange}
-                checked={formData.type === 'rent'}
+                checked={formData.type === 'hindi'}
               />
               <span>Hindi</span>
             </div>
@@ -230,11 +236,16 @@ export default function CreateListing() {
                 id='marathi'
                 className='w-5'
                 onChange={handleChange}
-                checked={formData.type === 'rent'}
+                checked={formData.type === 'marathi'}
               />
               <span>Marathi</span>
             </div>
+            </div>
+            </div>
 
+            <div className='flex gap-6 flex-wrap'>
+            <h3 className='font-bold'>Choose Categories : </h3>
+            <div className="flex gap-6 flex-wrap">
             <div className='flex gap-2'>
               <input
                 type='checkbox'
@@ -307,7 +318,7 @@ export default function CreateListing() {
             </div>
             <div className='flex gap-2'>
               <input
-                type='scifi'
+                type='checkbox'
                 id='scifi'
                 className='w-5'
                 onChange={handleChange}
@@ -317,13 +328,14 @@ export default function CreateListing() {
             </div>
             <div className='flex gap-2'>
               <input
-                type='historic'
+                type='checkbox'
                 id='historic'
                 className='w-5'
                 onChange={handleChange}
                 checked={formData.historic}
               />
               <span>Historic</span>
+            </div>
             </div>
 
           </div>

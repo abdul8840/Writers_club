@@ -67,7 +67,12 @@ export default function Header() {
             ) : (
               <li className=' text-slate-700 hover:underline'> Sign in</li>
             )}
+            
           </Link>
+
+          <h4>{currentUser.username}</h4>
+
+          
         </ul>
       </div>
     </header>

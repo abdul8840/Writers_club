@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
 const listingSchema = new mongoose.Schema(
   {
@@ -58,6 +59,7 @@ const listingSchema = new mongoose.Schema(
       type: Array,
       required: true,
     },
+    
     likes: {
       type: Number,
       default: 0
@@ -66,6 +68,7 @@ const listingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    
 
   },
   { timestamps: true }

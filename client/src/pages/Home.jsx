@@ -74,7 +74,7 @@ export default function Home() {
                   Show More {category.name} Stories
                 </Link>
               </div>
-              <div className='flex flex-wrap gap-4'>
+              <div className='flex flex-wrap gap-5'>
                 {category.listings.map((listing) => (
                   <ListingItem listing={listing} key={listing._id} />
                 ))}

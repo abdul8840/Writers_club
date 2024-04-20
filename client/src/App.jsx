@@ -11,7 +11,10 @@ import UpdateListing from './pages/UpdateListing';
 import Listing from './pages/Listing';
 import Search from './pages/Search';
 
+
 export default function App() {
+  const postId = 'some-post-id'; // Replace with actual post ID
+  const userId = 'some-user-id'; // Replace with actual user ID
   return (
     <BrowserRouter>
       <Header />
