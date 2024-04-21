@@ -48,6 +48,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/listing', listingRouter);
 app.use('/api/listings', listingRouter);
 
+
 // Serve index.html for all other routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
@@ -79,6 +80,9 @@ app.post('/api/reports', async (req, res) => {
     res.status(500).json({ message: 'Failed to report post', error: error.stack });
   }
 });
+
+
+
 
 
 

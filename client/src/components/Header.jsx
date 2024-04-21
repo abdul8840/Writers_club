@@ -70,7 +70,7 @@ export default function Header() {
             
           </Link>
 
-          <h4>{currentUser.username}</h4>
+          {/* <h4>{currentUser.username}</h4> */}
 
           
         </ul>

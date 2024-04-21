@@ -1,42 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaThumbsUp } from 'react-icons/fa'; // Import the thumbs-up icon
+import { FaThumbsUp } from 'react-icons/fa';
+
+const generateUserIdentifier = () => {
+  // Generate a random identifier for the user
+  return `user_${Math.random().toString(36).substr(2, 9)}`;
+};
 
 const ListingItem = ({ listing }) => {
-  const [likes, setLikes] = useState(listing.likes);
-  const [liked, setLiked] = useState(false); // State to track whether the listing has been liked
+  const [likes, setLikes] = useState(() => {
+    return parseInt(localStorage.getItem(`likes_${listing._id}`) || '0', 10);
+  });
+
+  const [liked, setLiked] = useState(() => {
+    const userIdentifier = localStorage.getItem('userIdentifier');
+    return localStorage.getItem(`liked_${listing._id}_${userIdentifier}`) === 'true';
+  });
 
   useEffect(() => {
-    // Check if the user has already liked this listing based on local storage
-    const isLiked = localStorage.getItem(`liked_${listing._id}`);
-    if (isLiked) {
-      setLiked(true);
+    // Generate and store user identifier in local storage
+    let userIdentifier = localStorage.getItem('userIdentifier');
+    if (!userIdentifier) {
+      userIdentifier = generateUserIdentifier();
+      localStorage.setItem('userIdentifier', userIdentifier);
+    }
+
+    // Check if the current user has liked the post
+    const userLiked = localStorage.getItem(`liked_${listing._id}_${userIdentifier}`);
+    if (userLiked === null) {
+      setLiked(false); // Set liked to false for new user
+    } else {
+      setLiked(userLiked === 'true');
     }
   }, [listing._id]);
 
-  const handleLike = async () => {
-    try {
-      const response = await fetch(`/api/listings/${listing._id}/like`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+  const handleLike = () => {
+    let updatedLikes = likes + 1;
 
-      if (!response.ok) {
-        throw new Error('Failed to like listing');
-      }
+    // Generate and retrieve user identifier
+    const userIdentifier = localStorage.getItem('userIdentifier');
 
-      const data = await response.json();
-      const updatedLikes = data.likes;
-      setLikes(updatedLikes);
-      setLiked(true); // Set liked to true after successfully liking the listing
+    // Update local storage for the current user
+    localStorage.setItem(`liked_${listing._id}_${userIdentifier}`, 'true');
+    localStorage.setItem(`likes_${listing._id}`, updatedLikes.toString());
 
-      // Store the like status in local storage
-      localStorage.setItem(`liked_${listing._id}`, true);
-    } catch (error) {
-      console.error('Error liking listing:', error);
-    }
+    // Update state for the current user
+    setLikes(updatedLikes);
+    setLiked(true);
   };
 
   return (
@@ -62,10 +72,9 @@ const ListingItem = ({ listing }) => {
         </div>
       </Link>
       <div className="flex items-center gap-1 m-5">
-        {/* Render Font Awesome icon conditionally based on like status */}
         <FaThumbsUp
           className={`fa-solid cursor-pointer ${liked ? 'text-blue-500' : ''}`}
-          onClick={liked ? null : handleLike} // Disable like action if already liked
+          onClick={handleLike}
         />
         <p>Likes: {likes}</p>
       </div>

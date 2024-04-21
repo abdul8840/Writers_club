@@ -73,18 +73,19 @@ export const likeListing = async (req, res) => {
     }
 
     // Increment the likes count
-    listing.likes += 1;
+    const currentLikes = parseInt(localStorage.getItem(`likes_${listingId}`) || '0', 10);
+    const updatedLikes = currentLikes + 1;
 
-    // Save the updated listing
-    await listing.save();
+    localStorage.setItem(`likes_${listingId}`, updatedLikes.toString());
 
     // Send response with updated likes count
-    res.status(200).json({ likes: listing.likes });
+    res.status(200).json({ likes: updatedLikes });
   } catch (error) {
     console.error('Error liking listing:', error);
     res.status(500).json({ message: 'Server Error' });
   }
 };
+
 
 
 

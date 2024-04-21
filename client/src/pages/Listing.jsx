@@ -16,9 +16,11 @@ export default function Listing() {
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(0);
   const { currentUser } = useSelector((state) => state.user);
   const params = useParams();
   const [showReportModal, setShowReportModal] = useState(false);
+  const [ownerUsername, setOwnerUsername] = useState("");
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -39,6 +41,14 @@ export default function Listing() {
         setListing(data);
         setLoading(false);
         setError(false);
+
+        // Fetch and set like status and count from local storage
+        const userIdentifier = localStorage.getItem('userIdentifier');
+        const isLiked = localStorage.getItem(`liked_${data._id}_${userIdentifier}`);
+        const likesCount = parseInt(localStorage.getItem(`likes_${data._id}`) || '0', 10);
+        
+        setLiked(isLiked === 'true');
+        setLikes(likesCount);
       } catch (error) {
         setError(true);
         setLoading(false);
@@ -48,33 +58,61 @@ export default function Listing() {
   }, [params.listingId]);
 
   useEffect(() => {
-    const isLiked = localStorage.getItem(`liked_${listing?._id}`);
-    if (isLiked) {
-      setLiked(true);
+    const fetchOwnerUsername = async () => {
+      try {
+        const res = await fetch(`/api/user/${listing.userRef}`);
+        const data = await res.json();
+        if (data.success === false) {
+          throw new Error("Failed to fetch owner username");
+        }
+        setOwnerUsername(data.username);
+      } catch (error) {
+        console.error("Error fetching owner username:", error);
+      }
+    };
+
+    if (listing) {
+      fetchOwnerUsername();
     }
   }, [listing]);
 
   const handleLike = async () => {
     try {
-      const response = await fetch(`/api/listings/${listing._id}/like`, {
+      const userIdentifier = localStorage.getItem('userIdentifier');
+      const isLiked = localStorage.getItem(`liked_${listing._id}_${userIdentifier}`);
+      
+      if (isLiked === 'true') {
+        console.log("You have already liked this post.");
+        return;
+      }
+  
+      const response = await fetch(`/api/listing/${listing._id}/like`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ userId: currentUser._id }), // Assuming currentUser has _id field
       });
-      if (!response.ok) {
-        throw new Error("Failed to like listing");
-      }
+  
       const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to like listing");
+      }
+  
       const updatedLikes = data.likes;
-      setListing({ ...listing, likes: updatedLikes });
+  
+      setListing(prevListing => ({ ...prevListing, likes: updatedLikes }));
+      setLikes(updatedLikes);
+      localStorage.setItem(`liked_${listing._id}_${userIdentifier}`, 'true');
+      localStorage.setItem(`likes_${listing._id}`, updatedLikes.toString());
       setLiked(true);
-      localStorage.setItem(`liked_${listing._id}`, true);
+  
     } catch (error) {
       console.error("Error liking listing:", error);
     }
   };
-
+  
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
     setCopied(true);
@@ -104,9 +142,6 @@ export default function Listing() {
             <div className="text-center items-center gap-4 m-5 text-slate-500 text-sm">
               <h2>Welcome to <span className="text-pink-500">Writers club</span></h2>
               <p>We hope you enjoy the content</p>
-              <p>{listing._id}</p>
-              <p>{listing.userRef}</p>
-              {/* <p>{landlord.username}</p> */}
             </div>
             <p className="text-center text-2xl font-semibold">
               {listing.name}
@@ -123,7 +158,7 @@ export default function Listing() {
                     onClick={liked ? null : handleLike}
                   />
                   <span className="text-slate-500 text-sm ">
-                    {listing.likes}
+                    {likes}
                   </span>
                 </div>
                 <FaComment className="text-slate-500 text-center size-5" />
@@ -140,13 +175,13 @@ export default function Listing() {
               <span className="font-semibold text-black">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>
               {listing.story}
             </p>
-            <div className="flex gap-4 mb-10">
+            <div className="flex gap-4 mb-5">
               <h3 className="font-bold">Language: </h3>
               <p className="">
                 {listing.type === "english" ? "English" : "Hindi"}
               </p>
             </div>
-            <div className="flex gap-5">
+            <div className="flex gap-5 mb-5">
               <h3 className="font-bold">Categories:</h3>
               <ul className="text-green-900 font-semibold text-sm flex flex-wrap items-center gap-4 sm:gap-6">
                 {listing &&
@@ -166,6 +201,9 @@ export default function Listing() {
                   })}
               </ul>
             </div>
+            <h3 className="mb-5"><span className="font-bold">Owner : </span>{ownerUsername}</h3>
+            <h3 className="mb-5"><span className="font-bold">PostID : </span>{listing._id}</h3>
+            
             {showReportModal && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                 <div className="bg-white p-6 rounded-lg w-120">
@@ -181,13 +219,8 @@ export default function Listing() {
               </div>
             )}
           </div>
-
-
-          
-
         </div>
       )}
-
     </main>
   );
 }

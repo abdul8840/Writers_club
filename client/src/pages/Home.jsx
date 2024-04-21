@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ListingItem from '../components/ListingItem';
+import User from '../../../api/models/user.model';
 
 export default function Home() {
   
@@ -20,7 +21,7 @@ export default function Home() {
   useEffect(() => {
     const fetchListings = async (category) => {
       try {
-        const res = await fetch(`/api/listing/get?${category.key}=true&limit=3`);
+        const res = await fetch(`/api/listing/get?${category.key}=true&limit=4`);
         const data = await res.json();
         setCategories((prevCategories) => {
           return prevCategories.map((prevCategory) => {
@@ -76,7 +77,7 @@ export default function Home() {
               </div>
               <div className='flex flex-wrap gap-5'>
                 {category.listings.map((listing) => (
-                  <ListingItem listing={listing} key={listing._id} />
+                  <ListingItem listing={listing} key={listing._id}/>
                 ))}
               </div>
             </div>
