@@ -209,16 +209,16 @@ export default function Listing() {
 
   const renderPollOptions = () => {
     return Object.entries(pollResults).map(([option, votes]) => (
-      <div key={option} className="flex items-center gap-2 mt-2">
+      <div key={option} className="gap-2 mt-5">
         <button 
-          className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 ${userVote === option ? 'bg-gray-500 cursor-not-allowed' : 'cursor-pointer'}`}
+          className={`w-full px-4 py-2 bg-slate-500 text-white rounded hover:bg-slate-600 ${userVote === option ? 'bg-gray-500 cursor-not-allowed' : 'cursor-pointer'}`}
           onClick={() => handleVote(option)}
           disabled={userVote !== null}
         >
           {option}
         </button>
-        <div className="w-1/2 bg-blue-200 h-5 rounded">
-          <div className="bg-blue-400 h-5 rounded" style={{ width: `${calculatePercentage(votes, Object.values(pollResults).reduce((a, b) => a + b, 0))}%` }}></div>
+        <div className="bg-blue-200 h-3 rounded">
+          <div className="bg-blue-400 h-3 mt-4 mb-4 rounded" style={{ width: `${calculatePercentage(votes, Object.values(pollResults).reduce((a, b) => a + b, 0))}%` }}></div>
         </div>
         <p className="ml-2 text-sm">{calculatePercentage(votes, Object.values(pollResults).reduce((a, b) => a + b, 0))}%</p>
       </div>
@@ -332,9 +332,12 @@ export default function Listing() {
               </div>
             )}
 
+            
+
 {Object.keys(pollResults).length > 0 && (
-        <div className="poll-results mt-4">
-          <h3 className="text-xl font-semibold mb-2">Opinion Poll</h3>
+        <div className="w-full">
+          <div className="w-1/2 block p-5 m-auto rounded-md bg-white poll-results mt-6">
+          <h3 className="text-xl font-bold mb-2 text-center">Opinion Poll</h3>
           <p>{pollQuestion}</p>
           {renderPollOptions()}
           
@@ -347,6 +350,7 @@ export default function Listing() {
               Close Poll
             </button>
           )}
+        </div>
         </div>
       )}
           </div>
