@@ -2,14 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 body{
   /* background-color: rgb(241, 245, 241); */
-  background-color: white;
+  background-color: #e2e8f0;
 }
 
 .cover_image{
-  width: 250px;
-  height: 400px;
+  width: 200px;
+  height: 300px;
   object-fit: cover;
   display: block;
   margin: 0px auto;
@@ -30,3 +32,5 @@ body{
   z-index: 999;
   transform: translateX(0);
 }
+
+

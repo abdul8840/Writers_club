@@ -215,7 +215,7 @@ export default function Profile() {
         />
         <button
           disabled={loading}
-          className='bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80'
+          className='bg-blue-500 hover:bg-blue-600 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80'
         >
           {loading ? 'Loading...' : 'Update'}
         </button>
@@ -243,7 +243,7 @@ export default function Profile() {
         {updateSuccess ? 'User is updated successfully!' : ''}
       </p>
       <button onClick={handleShowListings} className='text-green-700 w-full'>
-        Show Listings
+        My Stories
       </button>
       <p className='text-red-700 mt-5'>
         {showListingsError ? 'Error showing listings' : ''}
@@ -252,7 +252,7 @@ export default function Profile() {
       {userListings && userListings.length > 0 && (
         <div className='flex flex-col gap-4'>
           <h1 className='text-center mt-7 text-2xl font-semibold'>
-            Your Listings
+            My Stories
           </h1>
           {userListings.map((listing) => (
             <div

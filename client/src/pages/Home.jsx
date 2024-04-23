@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ListingItem from '../components/ListingItem';
-import User from '../../../api/models/user.model';
+import CarouselBasicExample from '../components/CarouselBasicExample';
 
 export default function Home() {
   
@@ -15,7 +15,6 @@ export default function Home() {
     { name: 'Scifi', key: 'scifi', listings: [] },
     { name: 'Romance', key: 'romance', listings: [] },
     { name: 'Historic', key: 'historic', listings: [] },
-    // Add more categories as needed
   ]);
 
   useEffect(() => {
@@ -23,44 +22,25 @@ export default function Home() {
       try {
         const res = await fetch(`/api/listing/get?${category.key}=true&limit=4`);
         const data = await res.json();
-        setCategories((prevCategories) => {
-          return prevCategories.map((prevCategory) => {
-            if (prevCategory.key === category.key) {
-              return { ...prevCategory, listings: data };
-            }
-            return prevCategory;
-          });
-        });
+        setCategories(prevCategories => 
+          prevCategories.map(prevCategory => 
+            prevCategory.key === category.key ? { ...prevCategory, listings: data } : prevCategory
+          )
+        );
       } catch (error) {
         console.log(error);
       }
     };
 
-    categories.forEach((category) => fetchListings(category));
+    categories.forEach(category => fetchListings(category));
   }, []);
 
   return (
     <div>
-      {/* Top Section */}
-      <div className='flex flex-col gap-6 p-10 max-w-6xl mx-auto'>
-        <h1 className='text-slate-700 font-bold text-3xl lg:text-6xl'>
-          <span className='text-slate-500'>Disclaimer</span>
-          <br />
-          Before Signup/login you have to follow the below instructions.
-        </h1>
-        <div className='text-gray-400 text-sm'>
-          <ul>
-            <li>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quis adipisci odit quos assumenda nostrum aspernatur?</li>
-            <li>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quis adipisci odit quos assumenda nostrum aspernatur?</li>
-            <li>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quis adipisci odit quos assumenda nostrum aspernatur?</li>
-            <li>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quis adipisci odit quos assumenda nostrum aspernatur?</li>
-          </ul>
-        </div>
-        <Link to={'/search'} className='text-sm text-blue-800 font-bold hover:underline'>
-          Let's get started...
-        </Link>
-      </div>
+      
+      <CarouselBasicExample/>
 
+      
 
       {/* Listing results for all categories */}
       {categories.map((category) => (

@@ -14,6 +14,8 @@ import cors from 'cors';
 
 import Report from "./models/report.model.js"
 
+import pollRoutes from './routes/poll.route.js';
+
 // import Comment from './models/comment.model.js'
 
 dotenv.config();
@@ -47,6 +49,7 @@ app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/listing', listingRouter);
 app.use('/api/listings', listingRouter);
+app.use('/api/opinionpoll', pollRoutes);
 
 
 // Serve index.html for all other routes
