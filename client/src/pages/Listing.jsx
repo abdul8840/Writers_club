@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
-  FaThumbsUp,
   FaBox,
   FaShare,
   FaComment,
   FaFlag,
   FaPoll,
 } from "react-icons/fa";
+import { IoIosHeart } from "react-icons/io";
 import ReportForm from "../components/ReportForm";
 
 export default function Listing() {
@@ -240,10 +240,10 @@ export default function Listing() {
             <p className="text-center text-2xl font-semibold">
               {listing.name}
               <div className="share-btn flex justify-center items-center gap-4 m-5">
-                <FaShare className="text-slate-500 text-center size-5" onClick={handleCopyLink} />
+                <FaShare className="text-slate-500 text-center cursor-pointer size-5" onClick={handleCopyLink} />
                 <div className="like-btn flex justify-center gap-1">
-                  <FaThumbsUp
-                    className={`fa-solid size-5 cursor-pointer ${liked ? "text-blue-500" : ""}`}
+                  <IoIosHeart
+                    className={`fa-solid size-5 cursor-pointer ${liked ? "text-red-500" : ""}`}
                     onClick={liked ? null : handleLike}
                   />
                   <span className="text-slate-500 text-sm ">{likes}</span>

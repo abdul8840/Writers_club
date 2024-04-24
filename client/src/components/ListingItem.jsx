@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaThumbsUp } from 'react-icons/fa';
+// import { FaThumbsUp } from 'react-icons/fa';
+import { IoIosHeart } from "react-icons/io";
 
 const generateUserIdentifier = () => {
   // Generate a random identifier for the user
@@ -72,8 +73,8 @@ const ListingItem = ({ listing }) => {
         </div>
       </Link>
       <div className="flex items-center gap-1 m-5">
-        <FaThumbsUp
-          className={`fa-solid cursor-pointer ${liked ? 'text-blue-500' : ''}`}
+        <IoIosHeart
+          className={`fa-solid cursor-pointer ${liked ? 'text-red-500' : ''}`}
           onClick={handleLike}
         />
         <p>Likes: {likes}</p>

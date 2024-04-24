@@ -10,6 +10,10 @@ import CreateListing from './pages/CreateListing';
 import UpdateListing from './pages/UpdateListing';
 import Listing from './pages/Listing';
 import Search from './pages/Search';
+import WorkShop from './pages/WorkShop';
+import Footer from './components/Footer';
+import Feedback from './pages/Feedback';
+import Policies from './pages/Policies'
 
 
 export default function App() {
@@ -24,6 +28,10 @@ export default function App() {
         <Route path='/sign-up' element={<SignUp />} />
         <Route path='/about' element={<About />} />
         <Route path='/search' element={<Search />} />
+        <Route path='/workshop' element={<WorkShop />} />
+        <Route path='/feedback' element={<Feedback />} />
+        <Route path='/policies' element={<Policies />} />
+        
         <Route path='/listing/:listingId' element={<Listing />} />
 
         <Route element={<PrivateRoute />}>
@@ -35,6 +43,7 @@ export default function App() {
           />
         </Route>
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

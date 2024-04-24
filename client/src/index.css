@@ -14,7 +14,7 @@ body{
   height: 300px;
   object-fit: cover;
   display: block;
-  margin: 0px auto;
+  margin: 10px auto;
 }
 
 .cover_content{

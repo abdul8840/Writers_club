@@ -15,6 +15,7 @@ import cors from 'cors';
 import Report from "./models/report.model.js"
 
 import pollRoutes from './routes/poll.route.js';
+import feedbackRouter from './routes/feedback.route.js';
 
 // import Comment from './models/comment.model.js'
 
@@ -50,6 +51,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/listing', listingRouter);
 app.use('/api/listings', listingRouter);
 app.use('/api/opinionpoll', pollRoutes);
+app.use('/api/feedback', feedbackRouter);
 
 
 // Serve index.html for all other routes
