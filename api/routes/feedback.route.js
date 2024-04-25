@@ -1,4 +1,3 @@
-// feedback.route.js
 import express from 'express';
 const router = express.Router();
 import Feedback from '../models/feedback.model.js';
@@ -17,6 +16,15 @@ router.get('/', async (req, res) => {
     try {
         const feedbacks = await Feedback.find();
         res.status(200).send(feedbacks);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+router.get('/count', async (req, res) => {
+    try {
+        const count = await Feedback.countDocuments();
+        res.status(200).send({ count });
     } catch (error) {
         res.status(500).send(error);
     }

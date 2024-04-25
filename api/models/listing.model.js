@@ -60,14 +60,15 @@ const listingSchema = new mongoose.Schema(
       required: true,
     },
     
-    likes: {
+    likes: [{
       type: Number,
-      default: 0
-    },
+      required: true
+    }],
     userRef: {
       type: String,
       required: true,
     },
+    
     
 
   },

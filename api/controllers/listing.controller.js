@@ -1,6 +1,7 @@
 import Listing from '../models/listing.model.js';
 import { errorHandler } from '../utils/error.js';
 
+
 export const createListing = async (req, res, next) => {
   try {
     const listing = await Listing.create(req.body);
@@ -62,6 +63,41 @@ export const getListing = async (req, res, next) => {
   }
 };
 
+
+export const viewListing = async (req, res) => {
+  const { listingId } = req.params;
+  const { userRef } = req.body;
+
+  try {
+    // Check if the user has already viewed the listing
+    const existingView = await View.findOne({ listingId, userRef });
+
+    if (existingView) {
+      return res.status(400).json({ success: false, message: 'You have already viewed this listing.' });
+    }
+
+    // Create a new view
+    const newView = new View({
+      listingId,
+      userRef,
+    });
+
+    await newView.save();
+
+    // Update the view count in the listing document
+    const listing = await Listing.findById(listingId);
+    listing.views = (listing.views || 0) + 1;
+    await listing.save();
+
+    res.status(200).json({ success: true, views: listing.views });
+  } catch (error) {
+    console.error('Error viewing listing:', error);
+    res.status(500).json({ success: false, message: 'Failed to view listing.' });
+  }
+};
+
+
+
 export const likeListing = async (req, res) => {
   try {
     const listingId = req.params.listingId;
@@ -85,7 +121,6 @@ export const likeListing = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
-
 
 
 
@@ -189,3 +224,4 @@ export const getListings = async (req, res, next) => {
     next(error);
   }
 };
+

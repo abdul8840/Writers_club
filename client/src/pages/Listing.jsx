@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
+  FaThumbsUp,
   FaBox,
   FaShare,
   FaComment,
   FaFlag,
   FaPoll,
+  FaEye
 } from "react-icons/fa";
-import { IoIosHeart } from "react-icons/io";
 import ReportForm from "../components/ReportForm";
 
 export default function Listing() {
@@ -71,6 +72,56 @@ export default function Listing() {
     };
     fetchListing();
   }, [params.listingId]);
+
+  useEffect(() => {
+    const trackUserView = async () => {
+      try {
+        const userIdentifier = localStorage.getItem('userIdentifier');
+        
+        // Wait for document to be fully loaded
+        if (document.readyState === 'complete') {
+          
+          if (!userIdentifier) {
+            console.error("User identifier not found in localStorage.");
+            return;
+          }
+    
+          const response = await fetch(`http://localhost:3000/api/listing/${params.listingId}/track-view`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userRef: userIdentifier }),
+          });
+    
+          const data = await response.json();
+    
+          if (!response.ok) {
+            if (data.message === "User has already viewed this listing") {
+              console.warn("User has already viewed this listing.");
+              return;
+            }
+            
+            console.error("Server responded with error:", data.message);
+            return;
+          }
+    
+          console.log("View tracked successfully:", data.message);
+          
+        } else {
+          console.warn('Document is not fully loaded. Waiting for it to complete...');
+          // Retry after waiting for a bit
+          setTimeout(trackUserView, 100);
+        }
+      } catch (error) {
+        console.error("Error tracking view:", error);
+      }
+    };
+    
+    
+    trackUserView();
+  }, [params.listingId]);
+
 
   useEffect(() => {
     const fetchOwnerUsername = async () => {
@@ -199,26 +250,22 @@ export default function Listing() {
   };
 
   const handleClearPoll = () => {
-    if (currentUser._id === listing.userRef) {
-      setPollResults({});
-      localStorage.removeItem(`pollResults_${listing._id}`);
-    } else {
-      alert("Only the owner can close the poll.");
-    }
+    setPollResults({});
+    localStorage.removeItem(`pollResults_${listing._id}`);
   };
 
   const renderPollOptions = () => {
     return Object.entries(pollResults).map(([option, votes]) => (
-      <div key={option} className="gap-2 mt-5">
+      <div key={option} className="flex items-center gap-2 mt-2">
         <button 
-          className={`w-full px-4 py-2 bg-slate-500 text-white rounded hover:bg-slate-600 ${userVote === option ? 'bg-gray-500 cursor-not-allowed' : 'cursor-pointer'}`}
+          className={`px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 ${userVote === option ? 'bg-gray-500 cursor-not-allowed' : 'cursor-pointer'}`}
           onClick={() => handleVote(option)}
           disabled={userVote !== null}
         >
           {option}
         </button>
-        <div className="bg-blue-200 h-3 rounded">
-          <div className="bg-blue-400 h-3 mt-4 mb-4 rounded" style={{ width: `${calculatePercentage(votes, Object.values(pollResults).reduce((a, b) => a + b, 0))}%` }}></div>
+        <div className="w-1/2 bg-blue-200 h-5 rounded">
+          <div className="bg-blue-400 h-5 rounded" style={{ width: `${calculatePercentage(votes, Object.values(pollResults).reduce((a, b) => a + b, 0))}%` }}></div>
         </div>
         <p className="ml-2 text-sm">{calculatePercentage(votes, Object.values(pollResults).reduce((a, b) => a + b, 0))}%</p>
       </div>
@@ -236,14 +283,16 @@ export default function Listing() {
             <div className="text-center items-center gap-4 m-5 text-slate-500 text-sm">
               <h2>Welcome to <span className="text-pink-500">Writers club</span></h2>
               <p>We hope you enjoy the content</p>
+              <span className="text-slate-500 text-sm ">Views: {listing && listing.views}</span>
+
             </div>
             <p className="text-center text-2xl font-semibold">
               {listing.name}
               <div className="share-btn flex justify-center items-center gap-4 m-5">
-                <FaShare className="text-slate-500 text-center cursor-pointer size-5" onClick={handleCopyLink} />
+                <FaShare className="text-slate-500 text-center size-5" onClick={handleCopyLink} />
                 <div className="like-btn flex justify-center gap-1">
-                  <IoIosHeart
-                    className={`fa-solid size-5 cursor-pointer ${liked ? "text-red-500" : ""}`}
+                  <FaThumbsUp
+                    className={`fa-solid size-5 cursor-pointer ${liked ? "text-blue-500" : ""}`}
                     onClick={liked ? null : handleLike}
                   />
                   <span className="text-slate-500 text-sm ">{likes}</span>
@@ -251,6 +300,10 @@ export default function Listing() {
                 <FaComment className="text-slate-500 text-center size-5" />
                 <FaFlag className="text-slate-500 text-center size-5 cursor-pointer" onClick={handleOpenReportModal} />
                 <FaPoll className="text-slate-500 text-center size-5 cursor-pointer" onClick={handleOpenPollModal} />
+                <div className="flex justify-center items-center gap-4 mt-4">
+                  <FaEye className="text-slate-500 text-center size-5" />
+                  <span className="text-slate-500 text-sm">Views: {listing && listing.views}</span>
+                </div>
               </div>
             </p>
             <div className="flex justify-center items-center mt-6 gap-2 text-slate-600 text-md font-bold text-center">
@@ -332,27 +385,19 @@ export default function Listing() {
               </div>
             )}
 
-            
-
-{Object.keys(pollResults).length > 0 && (
-        <div className="w-full">
-          <div className="w-1/2 block p-5 m-auto rounded-md bg-white poll-results mt-6">
-          <h3 className="text-xl font-bold mb-2 text-center">Opinion Poll</h3>
-          <p>{pollQuestion}</p>
-          {renderPollOptions()}
-          
-          {/* Conditionally render the Close Poll button */}
-          {currentUser._id === listing.userRef && (
-            <button 
-              className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-              onClick={handleClearPoll}
-            >
-              Close Poll
-            </button>
-          )}
-        </div>
-        </div>
-      )}
+            {Object.keys(pollResults).length > 0 && (
+              <div className="poll-results mt-4">
+                <h3 className="text-xl font-semibold mb-2">Opinion Poll</h3>
+                <p>{pollQuestion}</p>
+                {renderPollOptions()}
+                <button 
+                  className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                  onClick={handleClearPoll}
+                >
+                  Close Poll
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
