@@ -8,9 +8,10 @@ import {
   FaComment,
   FaFlag,
   FaPoll,
-  FaEye
+  FaEye,
 } from "react-icons/fa";
 import ReportForm from "../components/ReportForm";
+import Views from '../components/Views'
 
 export default function Listing() {
   const [listing, setListing] = useState(null);
@@ -72,56 +73,6 @@ export default function Listing() {
     };
     fetchListing();
   }, [params.listingId]);
-
-  useEffect(() => {
-    const trackUserView = async () => {
-      try {
-        const userIdentifier = localStorage.getItem('userIdentifier');
-        
-        // Wait for document to be fully loaded
-        if (document.readyState === 'complete') {
-          
-          if (!userIdentifier) {
-            console.error("User identifier not found in localStorage.");
-            return;
-          }
-    
-          const response = await fetch(`http://localhost:3000/api/listing/${params.listingId}/track-view`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ userRef: userIdentifier }),
-          });
-    
-          const data = await response.json();
-    
-          if (!response.ok) {
-            if (data.message === "User has already viewed this listing") {
-              console.warn("User has already viewed this listing.");
-              return;
-            }
-            
-            console.error("Server responded with error:", data.message);
-            return;
-          }
-    
-          console.log("View tracked successfully:", data.message);
-          
-        } else {
-          console.warn('Document is not fully loaded. Waiting for it to complete...');
-          // Retry after waiting for a bit
-          setTimeout(trackUserView, 100);
-        }
-      } catch (error) {
-        console.error("Error tracking view:", error);
-      }
-    };
-    
-    
-    trackUserView();
-  }, [params.listingId]);
-
 
   useEffect(() => {
     const fetchOwnerUsername = async () => {
@@ -283,8 +234,7 @@ export default function Listing() {
             <div className="text-center items-center gap-4 m-5 text-slate-500 text-sm">
               <h2>Welcome to <span className="text-pink-500">Writers club</span></h2>
               <p>We hope you enjoy the content</p>
-              <span className="text-slate-500 text-sm ">Views: {listing && listing.views}</span>
-
+              {/* <Views listingId={listing._id} userId={currentUser._id} /> */}
             </div>
             <p className="text-center text-2xl font-semibold">
               {listing.name}
@@ -300,10 +250,10 @@ export default function Listing() {
                 <FaComment className="text-slate-500 text-center size-5" />
                 <FaFlag className="text-slate-500 text-center size-5 cursor-pointer" onClick={handleOpenReportModal} />
                 <FaPoll className="text-slate-500 text-center size-5 cursor-pointer" onClick={handleOpenPollModal} />
-                <div className="flex justify-center items-center gap-4 mt-4">
-                  <FaEye className="text-slate-500 text-center size-5" />
-                  <span className="text-slate-500 text-sm">Views: {listing && listing.views}</span>
-                </div>
+              <span className="flex items-center gap-1 text-slate-500">
+              <FaEye />
+              <Views listingId={listing._id} userId={currentUser._id} />
+              </span>
               </div>
             </p>
             <div className="flex justify-center items-center mt-6 gap-2 text-slate-600 text-md font-bold text-center">

@@ -1,23 +1,17 @@
-// app.js
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import listingRouter from './routes/listing.route.js';
-
 import cookieParser from 'cookie-parser';
 import path from 'path';
-
 import bodyParser from 'body-parser';
 import cors from 'cors';
-
-import Report from "./models/report.model.js"
-
+import Report from "./models/report.model.js";
 import pollRoutes from './routes/poll.route.js';
 import feedbackRouter from './routes/feedback.route.js';
-
-// import Comment from './models/comment.model.js'
+import visitRoutes from './routes/visit.route.js';
 
 dotenv.config();
 
@@ -35,15 +29,13 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+app.use(cors()); // Use cors middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.json());
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '/client/dist')));
-
-app.use(cors()); // Use cors middleware
-app.use(bodyParser.json());
-
 
 // API routes
 app.use('/api/user', userRouter);
@@ -52,14 +44,12 @@ app.use('/api/listing', listingRouter);
 app.use('/api/listings', listingRouter);
 app.use('/api/opinionpoll', pollRoutes);
 app.use('/api/feedback', feedbackRouter);
-
+app.use('/api', visitRoutes);
 
 // Serve index.html for all other routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
-
-
 
 app.post('/api/reports', async (req, res) => {
   try {
@@ -85,12 +75,6 @@ app.post('/api/reports', async (req, res) => {
     res.status(500).json({ message: 'Failed to report post', error: error.stack });
   }
 });
-
-
-
-
-
-
 
 // Error handling middleware
 app.use((err, req, res, next) => {

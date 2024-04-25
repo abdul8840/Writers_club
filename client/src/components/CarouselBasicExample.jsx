@@ -28,7 +28,7 @@ export default function CarouselBasicExample({ currentUser }){
           <p>{currentUser ? `Welcome, ${currentUser.username}` : 'Welcome'}</p>
           <h1 className="text-5xl font-bold mb-4">Your Reading Platform</h1>
           <p className="text-lg mb-8">Read your favorite Stories like thriller, comedy, sci-fi, and more</p>
-          <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded">
+          <button className="bg-white border-2 border-black text-black font-bold mb-4 hover:bg-black hover:text-white px-6 py-2 rounded">
             <Link to={`/search?category=`}>Start Reading</Link>
           </button>
         </div>
