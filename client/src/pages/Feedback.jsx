@@ -106,9 +106,55 @@ function Feedback() {
 
       <div className="p-3 max-w-lg mx-auto">
         {showForm && (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-white border-2 p-5 rounded-lg ">
-            {/* Form inputs */}
-          </form>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="mb-4">
+            <input
+              className="border p-3 w-full rounded-lg"
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <input
+              className="border p-3 w-full rounded-lg"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <textarea
+              className="border p-3 w-full rounded-lg"
+              placeholder="Message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              required
+            ></textarea>
+          </div>
+          <div className="mb-4">
+            <input
+              className="border p-3 w-full rounded-lg"
+              type="number"
+              min="1"
+              max="10"
+              placeholder="Rating (out of 10)"
+              value={rating}
+              onChange={(e) => setRating(e.target.value)}
+              required
+            />
+          </div>
+          <button 
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
         )}
       </div>
 
