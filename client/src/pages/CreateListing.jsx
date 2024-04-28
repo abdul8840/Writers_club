@@ -1,3 +1,5 @@
+//createlisting
+
 import { useState } from 'react';
 import {
   getDownloadURL,
@@ -106,7 +108,7 @@ export default function CreateListing() {
         type: e.target.id,
       });
     }
-
+  
     if (
       e.target.id === 'drama' ||
       e.target.id === 'thriller' ||
@@ -123,18 +125,40 @@ export default function CreateListing() {
         [e.target.id]: e.target.checked,
       });
     }
-
+  
     if (
       e.target.type === 'number' ||
       e.target.type === 'text' ||
       e.target.type === 'textarea'
     ) {
-      setFormData({
-        ...formData,
-        [e.target.id]: e.target.value,
-      });
+      // Check if the input is for the story textarea
+      if (e.target.id === 'story') {
+        // Filter out abusive words
+        const filteredStory = filterAbusiveWords(e.target.value);
+        // Update the form data with the filtered story
+        setFormData({
+          ...formData,
+          story: filteredStory,
+        });
+      } else {
+        // For other inputs, update form data directly
+        setFormData({
+          ...formData,
+          [e.target.id]: e.target.value,
+        });
+      }
     }
   };
+
+  const filterAbusiveWords = (input) => {
+    const abusiveWords = ["abuse1", "abuse2", "abuse3", "fuck"]; // Add abusive words to this array
+    const inputWords = input.split(/\s+/); // Split the input into words
+    // Filter out abusive words
+    const filteredWords = inputWords.filter(word => !abusiveWords.includes(word.toLowerCase()));
+    // Join the filtered words back into a string
+    return filteredWords.join(' ');
+  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -9,9 +9,13 @@ import {
   FaFlag,
   FaPoll,
   FaEye,
+  FaHeart,
 } from "react-icons/fa";
 import ReportForm from "../components/ReportForm";
 import Views from '../components/Views'
+
+// import CommentForm from "../components/CommentForm";
+
 
 export default function Listing() {
   const [listing, setListing] = useState(null);
@@ -22,6 +26,8 @@ export default function Listing() {
   const [likes, setLikes] = useState(0);
   const [showReportModal, setShowReportModal] = useState(false);
   const [ownerUsername, setOwnerUsername] = useState("");
+  const [comments, setComments] = useState([]);
+const [newComment, setNewComment] = useState('');
 
   // Opinion Poll States
   const [showPollModal, setShowPollModal] = useState(false);
@@ -31,6 +37,7 @@ export default function Listing() {
   const [pollResults, setPollResults] = useState({});
 
   const { currentUser } = useSelector((state) => state.user);
+  
   const params = useParams();
 
   useEffect(() => {
@@ -223,6 +230,95 @@ export default function Listing() {
     ));
   };
 
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await fetch('/api/comments'); // Adjust the route if needed
+        if (!response.ok) {
+          throw new Error('Failed to fetch comments');
+        }
+        const data = await response.json();
+        setComments(data);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+    };
+
+    fetchComments();
+  }, []);
+
+  const handleDeleteComment = async (id) => {
+    try {
+      const response = await fetch(`/api/comments/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete comment');
+      }
+      setComments(comments.filter(comment => comment._id !== id));
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+    }
+  };
+
+  const handleUpdateComment = async (id, content) => {
+    try {
+      const response = await fetch(`/api/comments/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update comment');
+      }
+      const updatedComment = await response.json();
+      setComments(comments.map(comment =>
+        comment._id === updatedComment._id ? updatedComment : comment
+      ));
+    } catch (error) {
+      console.error('Error updating comment:', error);
+    }
+  };
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Obtain userId from currentUser
+      const userId = currentUser._id;
+  
+      // Ensure listingId is available from listing object or useParams
+      const listingId = listing._id; // Assuming listing is available in component state
+  
+      const response = await fetch('/api/comments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: newComment,
+          userRef: userId,
+          listingRef: listingId,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to submit comment'); // Throw an error if response is not ok
+      }
+  
+      const comment = await response.json();
+      setComments([...comments, comment]);
+      setNewComment(''); // Clear the comment input field
+    } catch (error) {
+      console.error('Error submitting comment:', error);
+      // Handle the error - you can set an error state or display an error message
+    }
+  };
+  
+  
+
   return (
     <main className="p-3 max-w-4xl mx-auto">
       {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
@@ -241,8 +337,8 @@ export default function Listing() {
               <div className="share-btn flex justify-center items-center gap-4 m-5">
                 <FaShare className="text-slate-500 text-center size-5" onClick={handleCopyLink} />
                 <div className="like-btn flex justify-center gap-1">
-                  <FaThumbsUp
-                    className={`fa-solid size-5 cursor-pointer ${liked ? "text-blue-500" : ""}`}
+                  <FaHeart
+                    className={`fa-solid size-5 cursor-pointer ${liked ? "text-red-500" : ""}`}
                     onClick={liked ? null : handleLike}
                   />
                   <span className="text-slate-500 text-sm ">{likes}</span>
@@ -284,6 +380,8 @@ export default function Listing() {
             </div>
             <h3 className="mb-5"><span className="font-bold">Owner : </span>{ownerUsername}</h3>
             <h3 className="mb-5"><span className="font-bold">PostID : </span>{listing._id}</h3>
+
+            {/* <Comment /> */}
             
             {showReportModal && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -351,6 +449,37 @@ export default function Listing() {
           </div>
         </div>
       )}
+
+
+<div>
+      <h1>Listing</h1>
+      {/* Display listing content */}
+
+      {/* Comment Form */}
+      <form onSubmit={(e) => handleCommentSubmit(e, userId)}>
+        <textarea
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          placeholder="Write your comment..."
+          required
+        />
+        <button type="submit">Submit</button>
+      </form>
+
+      <div>
+        <h2>Comments</h2>
+        {comments.map((comment) => (
+          <Comment
+            key={comment._id}
+            comment={comment}
+            onDelete={handleDeleteComment}
+            onUpdate={handleUpdateComment}
+          />
+        ))}
+      </div>
+    </div>
+
+
     </main>
   );
 }

@@ -12,6 +12,7 @@ import Report from "./models/report.model.js";
 import pollRoutes from './routes/poll.route.js';
 import feedbackRouter from './routes/feedback.route.js';
 import visitRoutes from './routes/visit.route.js';
+import  commentRoutes from './routes/comment.route.js';
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ app.use('/api/listings', listingRouter);
 app.use('/api/opinionpoll', pollRoutes);
 app.use('/api/feedback', feedbackRouter);
 app.use('/api', visitRoutes);
+app.use('/api/comments', commentRoutes);
 
 // Serve index.html for all other routes
 app.get('*', (req, res) => {

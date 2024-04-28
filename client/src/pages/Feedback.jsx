@@ -91,7 +91,7 @@ function Feedback() {
   };
 
   return (
-    <div className="feedback-container p-4 bg-white">
+    <div className="feedback-container p-4 ">
       <h1 className="text-xl mb-6 mt-4 text-center font-bold">Give Your Feedback</h1>
       <div className="max-w-2xl m-auto flex justify-between">
         <h2 className="text-xl mb-2">Total Feedbacks: ({totalCount})</h2>
