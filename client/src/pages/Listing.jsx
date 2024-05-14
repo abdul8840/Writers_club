@@ -323,7 +323,7 @@ const [newComment, setNewComment] = useState('');
     <main className="p-3 max-w-4xl mx-auto">
       {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
       {error && <p className="text-center my-7 text-2xl">Something went wrong!</p>}
-      {listing && !loading && !error && (
+      {listing && listing._id && !loading && !error && (
         <div className="">
           {copied && <p className="copied-msg">Link copied!</p>}
           <div className="listing-details">
