@@ -109,6 +109,12 @@ const [newComment, setNewComment] = useState('');
 
   const handleLike = async () => {
     try {
+      // Add null check for listing
+      if (!listing) {
+        console.error("Listing is null");
+        return;
+      }
+  
       const userIdentifier = localStorage.getItem('userIdentifier');
       const isLiked = localStorage.getItem(`liked_${listing._id}_${userIdentifier}`);
       
@@ -116,7 +122,7 @@ const [newComment, setNewComment] = useState('');
         console.log("You have already liked this post.");
         return;
       }
-
+  
       const response = await fetch(`/api/listing/${listing._id}/like`, {
         method: "POST",
         headers: {
@@ -124,25 +130,26 @@ const [newComment, setNewComment] = useState('');
         },
         body: JSON.stringify({ userId: currentUser._id }),
       });
-
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
         throw new Error(data.message || "Failed to like listing");
       }
-
+  
       const updatedLikes = data.likes;
-
+  
       setListing(prevListing => ({ ...prevListing, likes: updatedLikes }));
       setLikes(updatedLikes);
       localStorage.setItem(`liked_${listing._id}_${userIdentifier}`, 'true');
       localStorage.setItem(`likes_${listing._id}`, updatedLikes.toString());
       setLiked(true);
-
+  
     } catch (error) {
       console.error("Error liking listing:", error);
     }
   };
+  
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
