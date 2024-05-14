@@ -151,7 +151,41 @@ export default function CreateListing() {
   };
 
   const filterAbusiveWords = (input) => {
-    const abusiveWords = ["abuse1", "abuse2", "abuse3", "fuck"]; // Add abusive words to this array
+    const abusiveWords = ["abuse1", "Fuck", "Shit", "Asshole", "Bitch", "Bastard",
+    "Dick", "Cunt", "Motherfucker", "Ass", "Slut",
+    "Whore", "Nigger", "Faggot", "Retard", "Gay",
+    "Dyke", "Tranny", "Chink", "Spic", "Kike",
+    "Nigga", "Bitchass", "Piss", "Pissed off", "Piss off",
+    "Crap", "Douchebag", "Wanker", "Fuckwit", "Twat",
+    "Arsehole", "Bollocks", "Prick", "Cock", "Cockhead",
+    "Shithead", "Son of a bitch", "Jackass", "Dumbass", "Motherfucking", 
+  
+    "fuck", "shit", "asshole", "bitch", "bastard",
+    "dick", "cunt", "motherfucker", "ass", "slut",
+    "whore", "nigger", "faggot", "retard", "gay",
+    "dyke", "tranny", "chink", "spic", "kike",
+    "nigga", "bitchass", "piss", "pissed off", "piss off",
+    "crap", "douchebag", "wanker", "fuckwit", "twat",
+    "arsehole", "bollocks", "prick", "cock", "cockhead",
+    "shithead", "son of a bitch", "jackass", "dumbass", "motherfucking",
+
+    "Chutiya", "Madarchod", "Behenchod", "Gandu", "Bhosdike",
+  "Bhenchod", "Randi", "Kutiya", "Saala", "Harami",
+  "Chutiye", "Laude", "Lavde", "Bhosdiwale", "Gand",
+  "Bhadwa", "Chut", "Lund", "Chutia", "Chutiyapa",
+  "Bhosdi", "Bhen ke lode", "Teri maa ka bhosda", "Teri maa ki chut",
+  "Bhadwe", "Chut ke baal", "Chut ke dushman", "Chut ka pujari", "Chut marani",
+  "Chut marne wala", "Chutad", "Gandu sala", "Gandu kela", "Gandmasti",
+
+  "chutiya", "madarchod", "behenchod", "gandu", "bhosdike",
+  "bhenchod", "randi", "kutiya", "saala", "harami",
+  "chutiye", "laude", "lavde", "bhosdiwale", "gand",
+  "bhadwa", "chut", "lund", "chutia", "chutiyapa",
+  "bhosdi", "bhen ke lode", "teri maa ka bhosda", "teri maa ki chut",
+  "bhadwe", "chut ke baal", "chut ke dushman", "chut ka pujari", "chut marani",
+  "chut marne wala", "chutad", "gandu sala", "gandu kela", "gandmasti"
+    
+  ]; // Add abusive words to this array
     const inputWords = input.split(/\s+/); // Split the input into words
     // Filter out abusive words
     const filteredWords = inputWords.filter(word => !abusiveWords.includes(word.toLowerCase()));

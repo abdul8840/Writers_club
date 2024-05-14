@@ -98,7 +98,7 @@ export default function App() {
           </h1>
             </h6>
             <p>
-              Here you can read your favourite story. There are so many categories of stories to read.
+            Welcome to Writers Club, a dedicated online platform for writers and creativity enthusiasts!
             </p>
           </div>
           {/* <!-- Products section --> */}

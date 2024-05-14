@@ -35,8 +35,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-// Serve static files
-app.use(express.static(path.join(__dirname, '/client/dist')));
+
 
 // API routes
 app.use('/api/user', userRouter);
@@ -47,6 +46,9 @@ app.use('/api/opinionpoll', pollRoutes);
 app.use('/api/feedback', feedbackRouter);
 app.use('/api', visitRoutes);
 app.use('/api/comments', commentRoutes);
+
+// Serve static files
+app.use(express.static(path.join(__dirname, '/client/dist')));
 
 // Serve index.html for all other routes
 app.get('*', (req, res) => {
