@@ -117,12 +117,14 @@ const [newComment, setNewComment] = useState('');
   
       const userIdentifier = localStorage.getItem('userIdentifier');
       const isLiked = localStorage.getItem(`liked_${listing._id}_${userIdentifier}`);
-      
+      console.log("Is Liked:", isLiked);
+  
       if (isLiked === 'true') {
         console.log("You have already liked this post.");
         return;
       }
   
+      // If the user hasn't liked the post before, proceed with liking it
       const response = await fetch(`/api/listing/${listing._id}/like`, {
         method: "POST",
         headers: {
@@ -143,12 +145,14 @@ const [newComment, setNewComment] = useState('');
       setLikes(updatedLikes);
       localStorage.setItem(`liked_${listing._id}_${userIdentifier}`, 'true');
       localStorage.setItem(`likes_${listing._id}`, updatedLikes.toString());
-      setLiked(true);
+      console.log("Liked successfully");
   
     } catch (error) {
       console.error("Error liking listing:", error);
     }
   };
+  
+  
   
 
   const handleCopyLink = () => {

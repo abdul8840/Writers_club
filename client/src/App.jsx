@@ -14,6 +14,7 @@ import WorkShop from './pages/WorkShop';
 import Footer from './components/Footer';
 import Feedback from './pages/Feedback';
 import Policies from './pages/Policies'
+import Product from './pages/Product';
 
 
 export default function App() {
@@ -31,6 +32,10 @@ export default function App() {
         <Route path='/workshop' element={<WorkShop />} />
         <Route path='/feedback' element={<Feedback />} />
         <Route path='/policies' element={<Policies />} />
+
+        <Route path='/product' element={<Product/>}>
+            <Route path=':productId' element={<Product/>}/>
+          </Route>
         
         <Route path='/listing/:listingId' element={<Listing />} />
 

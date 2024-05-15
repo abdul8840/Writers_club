@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-// import { FaThumbsUp } from 'react-icons/fa';
 import { IoIosHeart } from "react-icons/io";
 
 const generateUserIdentifier = () => {
@@ -36,18 +35,28 @@ const ListingItem = ({ listing }) => {
   }, [listing._id]);
 
   const handleLike = () => {
-    let updatedLikes = likes + 1;
+    // Toggle like status
+    const newLiked = !liked;
+
+    // Calculate updated like count
+    let updatedLikes = likes;
+
+    if (newLiked) {
+      updatedLikes++;
+    } else {
+      updatedLikes--;
+    }
 
     // Generate and retrieve user identifier
     const userIdentifier = localStorage.getItem('userIdentifier');
 
     // Update local storage for the current user
-    localStorage.setItem(`liked_${listing._id}_${userIdentifier}`, 'true');
+    localStorage.setItem(`liked_${listing._id}_${userIdentifier}`, newLiked.toString());
     localStorage.setItem(`likes_${listing._id}`, updatedLikes.toString());
 
     // Update state for the current user
     setLikes(updatedLikes);
-    setLiked(true);
+    setLiked(newLiked);
   };
 
   return (

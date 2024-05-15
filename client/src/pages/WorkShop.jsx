@@ -1,8 +1,13 @@
 import React from 'react'
+import NewCollections from '../components/NewCollections/NewCollections'
 
 const WorkShop = () => {
   return (
-    <div>WorkShop</div>
+    <>
+
+    <NewCollections />
+      
+    </>
   )
 }
 

@@ -151,7 +151,7 @@ export default function CreateListing() {
   };
 
   const filterAbusiveWords = (input) => {
-    const abusiveWords = ["abuse1", "Fuck", "Shit", "Asshole", "Bitch", "Bastard",
+    const abusiveWords = ["abuse", "Fuck", "Shit", "Asshole", "Bitch", "Bastard",
     "Dick", "Cunt", "Motherfucker", "Ass", "Slut",
     "Whore", "Nigger", "Faggot", "Retard", "Gay",
     "Dyke", "Tranny", "Chink", "Spic", "Kike",
