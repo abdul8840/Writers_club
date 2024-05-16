@@ -182,7 +182,7 @@ const [newComment, setNewComment] = useState('');
   };
 
   const handleClosePollModal = () => {
-    setShowPollModal(false);
+    setShowPollModal(true);
   };
 
   const handlePollSubmit = () => {
@@ -202,19 +202,21 @@ const [newComment, setNewComment] = useState('');
       console.log("You have already voted.");
       return;
     }
-
+  
     setUserVote(option);
     setPollResults((prevResults) => {
       const newResults = {
         ...prevResults,
         [option]: prevResults[option] + 1,
       };
-      
+  
+      // Update the poll results in local storage
       localStorage.setItem(`pollResults_${listing._id}`, JSON.stringify(newResults));
-      
+  
       return newResults;
     });
   };
+  
 
   const calculatePercentage = (votes, total) => {
     return ((votes / total) * 100).toFixed(2);
