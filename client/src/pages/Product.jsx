@@ -7,12 +7,16 @@ const Product = () => {
     const context = useContext(ShopContext);
     const { productId } = useParams();
 
-    if (!context) {
-        return <div>Loading...</div>;
+    // Handle null context
+    if (!context || !context.new_collections) {
+        return <div>Loading...</div>; // or any other fallback UI
     }
 
-    const { products } = context;
-    const product = products.find((product) => product.id === Number(productId));
+    // Destructure new_collections from context
+    const { new_collections } = context;
+
+    // Find the product with the matching productId
+    const product = new_collections.find((product) => product.id === Number(productId));
 
     if (!product) {
         return <div>Product not found!</div>;

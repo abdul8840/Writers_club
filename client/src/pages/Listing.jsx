@@ -73,6 +73,8 @@ const [newComment, setNewComment] = useState('');
           setPollResults(storedPollResults);
         }
 
+        
+
       } catch (error) {
         setError(true);
         setLoading(false);
@@ -336,6 +338,9 @@ const [newComment, setNewComment] = useState('');
       {error && <p className="text-center my-7 text-2xl">Something went wrong!</p>}
       {listing && listing._id && !loading && !error && (
         <div className="">
+          
+          
+
           {copied && <p className="copied-msg">Link copied!</p>}
           <div className="listing-details">
             <div className="text-center items-center gap-4 m-5 text-slate-500 text-sm">
@@ -354,7 +359,7 @@ const [newComment, setNewComment] = useState('');
                   />
                   <span className="text-slate-500 text-sm ">{likes}</span>
                 </div>
-                <FaComment className="text-slate-500 text-center size-5" />
+                {/* <FaComment className="text-slate-500 text-center size-5" /> */}
                 <FaFlag className="text-slate-500 text-center size-5 cursor-pointer" onClick={handleOpenReportModal} />
                 <FaPoll className="text-slate-500 text-center size-5 cursor-pointer" onClick={handleOpenPollModal} />
               <span className="flex items-center gap-1 text-slate-500">
@@ -391,6 +396,8 @@ const [newComment, setNewComment] = useState('');
             </div>
             <h3 className="mb-5"><span className="font-bold">Owner : </span>{ownerUsername}</h3>
             <h3 className="mb-5"><span className="font-bold">PostID : </span>{listing._id}</h3>
+
+            
 
             {/* <Comment /> */}
             

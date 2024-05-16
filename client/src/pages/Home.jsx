@@ -4,6 +4,8 @@ import ListingItem from '../components/ListingItem';
 import CarouselBasicExample from '../components/CarouselBasicExample';
 
 export default function Home() {
+
+  const [offerListings, setOfferListings] = useState([]);
   
   const [categories, setCategories] = useState([
     { name: 'Thriller', key: 'thriller', listings: [] },
@@ -35,12 +37,40 @@ export default function Home() {
     categories.forEach(category => fetchListings(category));
   }, []);
 
+  useEffect(() => {
+    const fetchOfferListings = async () => {
+      try {
+        const res = await fetch('/api/listing/get?=true&limit=8');
+        const data = await res.json();
+        setOfferListings(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    
+    fetchOfferListings();
+  }, []);
+
   return (
     <div className=''>
       
       <CarouselBasicExample/>
 
-      
+      <div className='max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10'>
+        {offerListings && offerListings.length > 0 && (
+          <div className=''>
+            <div className='my-3'>
+              <h2 className='text-2xl font-semibold text-slate-600'>Only On WritersClub</h2>
+              <Link className='text-sm text-blue-800 hover:underline' to={'/search?english=true'}>Show more Stories</Link>
+            </div>
+            <div className='flex flex-wrap gap-4'>
+              {offerListings.map((listing) => (
+                <ListingItem listing={listing} key={listing._id} />
+              ))}
+            </div>
+          </div>
+        )}
+        </div>
 
       {/* Listing results for all categories */}
       {categories.map((category) => (
