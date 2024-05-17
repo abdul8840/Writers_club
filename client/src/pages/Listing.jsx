@@ -471,23 +471,26 @@ const [newComment, setNewComment] = useState('');
       )}
 
 
-<div>
-      <h1>Listing</h1>
+<div className="mt-20">
+      <h1 className="text-center font-bold">Add Comment</h1>
       {/* Display listing content */}
 
       {/* Comment Form */}
       <form onSubmit={(e) => handleCommentSubmit(e, userId)}>
-        <textarea
+        <div className="max-[1200px] ml-40">
+        <input
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
+          className='border p-3 rounded-lg mr-5 w-[500px] mb-4 mt-4'
           placeholder="Write your comment..."
           required
         />
-        <button type="submit">Submit</button>
+        <button type="submit" className="bg-white border-2 border-black text-black font-bold mb-4 hover:bg-black hover:text-white px-6 py-2 rounded" >Submit</button>
+        </div>
       </form>
 
       <div>
-        <h2>Comments</h2>
+        <h2 className="text-center font-bold">Comments</h2>
         {comments.map((comment) => (
           <Comment
             key={comment._id}

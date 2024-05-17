@@ -11,8 +11,8 @@ const CommentForm = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <textarea value={content} onChange={(e) => setContent(e.target.value)} />
-      <button type="submit">Submit</button>
+      <input className='border p-3 rounded-lg' value={content} onChange={(e) => setContent(e.target.value)} />
+      <button className="bg-white border-2 border-black text-black font-bold mb-4 hover:bg-black hover:text-white px-6 py-2 rounded" type="submit">Submit</button>
     </form>
   );
 };
